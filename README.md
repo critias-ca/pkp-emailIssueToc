@@ -1,21 +1,19 @@
-# Email Issue ToC plugin for OJS
+# Email Issue JCAA Logo, Toc, Ads, Subs, Footer
+This plugin was built from the EmailIssueToc plugin - https://github.com/ulsdevteam/pkp-emailIssueToc
+It's designed to add additional content to published issue notifications. Including a logo, Advertisers and sustaining subscribers.
 
-Plugin for PKP OJS. Embeds the table of contents within the default notification email sent when publishing an issue.
+**Installation instructions:**
 
-## Requirements
+1. Manually install via the filesystem, extract the contents of this archive to a "emailIssueToc" directory under "plugins/generic" in your OJS root.
+2. Move the objects to the /templates/frontend/objects directory.
+3. Enter database values into `dbconnect.php`
+4. In the workflow section of your OJS, locate the email template "notification"
+5. ensure the template body is empty except for `{$notificationContents}`.
+6. Set the email template subject as desired. Recommend: `Your digital version of {$siteTitle}`
 
-* OJS 3.2 or later
+**Adjustments:**
 
-## Configuration
-
-Install this as a "generic" plugin in OJS.  The preferred installation method is through the Plugin Gallery.
-
-To install manually via the filesystem, extract the contents of this archive to a "emailIssueToc" directory under "plugins/generic" in your OJS root.  To install via Git submodule, target that same directory path: `git submodule add https://github.com/ulsdevteam/pkp-emailIssueToc plugins/generic/emailIssueToc` and `git submodule update --init --recursive plugins/generic/emailIssueToc`. Run the installation script to register this plugin, e.g.: `php lib/pkp/tools/installPluginVersion.php plugins/generic/emailIssueToc/version.xml`.
-
-Login as a Journal Manager and navigate to the journal(s) desired.  Enable the plugin via Login -> Settings -> Website -> Plugins -> Email Issue TOC -> Enable.
-
-## Author / License
-
-Written by Sudheendra Kusume for the [University of Pittsburgh](http://www.pitt.edu).  Copyright (c) University of Pittsburgh.
-
-Released under a license of GPL v2 or later.
+1. To adjust image sizes, modify the end of line 2 in `ads.sql` and line 128 in `Ads_Subs.php`. Recommended values are 77 and 153, which are 60% of 128 and 256 respectively.
+Default: 77, 153
+2. To change the logo to either the default black or colored logo, navigate to `templates/frontend/objects/issue_logo.tpl`.
+Default: Black and white logo

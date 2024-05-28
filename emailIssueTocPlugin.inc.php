@@ -12,41 +12,48 @@
 
 import('lib.pkp.classes.plugins.GenericPlugin');
 
-class emailIssueTocPlugin extends GenericPlugin{
+require_once('Ads_Subs.php');
 
+class emailIssueTocPlugin extends GenericPlugin
+{
 	/**
 	 * @copydoc LazyLoadPlugin::register()
 	 */
-	function register($category, $path, $mainContextId = NULL) {
+	function register($category, $path, $mainContextId = NULL)
+	{
 		$success = parent::register($category, $path, $mainContextId);
-		if (!Config::getVar('general', 'installed') || defined('RUNNING_UPGRADE')) return true;
+		if (!Config::getVar('general', 'installed') || defined('RUNNING_UPGRADE'))
+			return true;
 		if ($success && $this->getEnabled()) {
 			HookRegistry::register('NotificationManager::getNotificationMessage', array(&$this, 'sendToc'));
-			}
+		}
 		return $success;
 	}
 
 	/**
 	 * @copydoc PKPPlugin::getDisplayName()
-	*/
-	function getDisplayName() {
+	 */
+	function getDisplayName()
+	{
 		return __('plugins.generic.emailIssueToc.displayName');
 	}
 
 	/**
 	 * @copydoc PKPPlugin::getDescription()
 	 */
-	function getDescription() {
+	function getDescription()
+	{
 		return __('plugins.generic.emailIssueToc.description');
 	}
-	
+
 	/**
 	 * Add the Table of Content in the email message
 	 * @param string $hookname notificationmanager::getnotificationmessage
 	 * @param array $args
 	 * @return boolean False to continue execution
 	 */
-	function sendToc($hookname, $args) {
+	function sendToc($hookname, $args)
+	{
 		$application = Application::get();
 		$request = $application->getRequest();
 		$notification = $args[0];
@@ -97,8 +104,28 @@ class emailIssueTocPlugin extends GenericPlugin{
 					}
 					$templateMgr->assign('issue', $issue);
 					$templateMgr->assign('publishedSubmissions', $issueSubmissionsInSection);
-					$message = '<div>'.__('notification.type.issuePublished').'</div>';
-					$message .= $templateMgr->fetch('frontend/objects/issue_toc.tpl');
+					//add logo
+					$message = $templateMgr->fetch('frontend/objects/issue_logo.tpl');
+					//add Table of Contents
+					$message .= $templateMgr->fetch('frontend/objects/issue_toc_ads.tpl');
+
+					//variables for Database connection
+					require(__DIR__ . '/dbconnect.php');
+					if (!isset($dbhost, $dbuser, $dbpass, $dbname)) {
+						error_log("Error: Database connection variables are not set.");
+					}
+
+					//set Advertisers sql and add to message
+					$ADV = "";
+					load_file_content($ADV, __DIR__ . "/sql/ads.sql");
+					$message .= print_ads($ADV, $dbhost, $dbuser, $dbpass, $dbname);
+					//set SustainingSubs SQL and add to message
+					$ASL = "";
+					load_file_content($ASL, __DIR__ . "/sql/subs.sql");
+					$message .= print_subs($ASL, $dbhost, $dbuser, $dbpass, $dbname);
+					//add footer
+					$message .= $templateMgr->fetch('frontend/objects/issue_footer.tpl');
+
 					$request->setRouter($originalRouter);
 					$request->setDispatcher($originalDispatcher);
 				}
