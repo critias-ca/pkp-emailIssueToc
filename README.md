@@ -17,3 +17,6 @@ It's designed to add additional content to published issue notifications. Includ
 Default: 77, 153
 2. To change the logo to either the default black or colored logo, navigate to `templates/frontend/objects/issue_logo.tpl`.
 Default: Black and white logo
+
+## To do:
+- Find a way to pull the RGB from logoColorer and apply it as a color style to the links in issue_toc_ads.tpl

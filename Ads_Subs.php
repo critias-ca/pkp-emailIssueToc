@@ -52,6 +52,7 @@ function print_ads($sql, $dbhost, $dbuser, $dbpass, $dbname)
 				foreach ($row as $idx => $val) {
 					switch ($idx) {
 						case "Filename":
+							$val = str_replace(" ", '%20', $val);
 							$msg .= "\t\t<div>" . $val . "</div>\n";
 							break;
 						case "InstitutionName":
@@ -74,7 +75,7 @@ function print_ads($sql, $dbhost, $dbuser, $dbpass, $dbname)
 	$header1fr = "Merci à nos ";
 	$header2fr = "Annonceurs";
 
-	$msg = "<h2 style=\"margin-top: 4rem; font-weight: bold;\">" . $header1 . "<a href=\"https://caa-aca.ca/advertisement/\" target=\"_blank\">" . $header2 . "</a> | " .
+	$msg = "<h2 style=\"margin-top: 4rem; font-weight: normal; font-family: Lato, sans-serif; letter-spacing: 0.6px;\">" . $header1 . "<a href=\"https://caa-aca.ca/advertisement/\" target=\"_blank\">" . $header2 . "</a> | " .
 		$header1fr . "<a href=\"https://caa-aca.ca/advertisement/\" target=\"_blank\">" . $header2fr . "</a></h2>\n" . $msg;
 
 	return $msg;
@@ -118,6 +119,7 @@ function print_subs($sql, $dbhost, $dbuser, $dbpass, $dbname)
 					case "Domain":
 						if (!is_null($val) and !empty($val)) {
 							$domain = true;
+							$val = str_replace(" ", '%20', $val);
 							$msg .= "\t\t\t<a href=\"http://" . $val . "\" target=\"_blank\">";
 						}
 						break;
@@ -144,7 +146,7 @@ function print_subs($sql, $dbhost, $dbuser, $dbpass, $dbname)
 	$header1fr = "Merci à ACA";
 	$header2fr = "Membres de Soutien";
 
-	$msg = "<h2 style=\"margin-top: 4rem; font-weight: bold;\">" . $header1 . " <a href=\"https://caa-aca.ca/membership/sustaining-subscribers/\">" . $header2 . "</a> | "
+	$msg = "<h2 style=\"margin-top: 4rem; font-weight: normal; font-family: Lato, sans-serif; letter-spacing: 0.6px;\">" . $header1 . " <a href=\"https://caa-aca.ca/membership/sustaining-subscribers/\">" . $header2 . "</a> | "
 		. $header1fr . " <a href=\"https://caa-aca.ca/membership/sustaining-subscribers/\">" . $header2fr . "</a></h2>\n" . $msg;
 
 
