@@ -5,11 +5,11 @@ It's designed to add additional content to published issue notifications. Includ
 **Installation instructions:**
 
 1. Manually install via the filesystem, extract the contents of this archive to a "emailIssueToc" directory under "plugins/generic" in your OJS root.
-2. Move the objects to the /templates/frontend/objects directory.
+2. Move the contents of `objects` folder to the `/templates/frontend/objects` directory.
 3. Enter database values into `dbconnect.php`
 4. In the workflow section of your OJS, locate the email template "notification"
 5. ensure the template body is empty except for `{$notificationContents}`.
-6. Set the email template subject as desired. Recommend: `Your digital version of {$siteTitle}`
+6. Set the email template subject as desired. Recommended: `Your digital version of {$siteTitle}`
 
 **Adjustments:**
 
