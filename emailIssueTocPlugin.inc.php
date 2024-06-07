@@ -105,9 +105,9 @@ class emailIssueTocPlugin extends GenericPlugin
 					$templateMgr->assign('issue', $issue);
 					$templateMgr->assign('publishedSubmissions', $issueSubmissionsInSection);
 					//add logo
-					$message = $templateMgr->fetch('frontend/objects/issue_logo.tpl');
+					$message = $templateMgr->fetch('/../plugins/generic/emailIssueToc/objects/issue_logo.tpl');
 					//add Table of Contents
-					$message .= $templateMgr->fetch('frontend/objects/issue_toc_ads.tpl');
+					$message .= $templateMgr->fetch('/../plugins/generic/emailIssueToc/objects/issue_toc_ads.tpl');
 
 					//variables for Database connection
 					require(__DIR__ . '/dbconnect.php');
@@ -124,7 +124,7 @@ class emailIssueTocPlugin extends GenericPlugin
 					load_file_content($ASL, __DIR__ . "/sql/subs.sql");
 					$message .= print_subs($ASL, $dbhost, $dbuser, $dbpass, $dbname);
 					//add footer
-					$message .= $templateMgr->fetch('frontend/objects/issue_footer.tpl');
+					$message .= $templateMgr->fetch('/../plugins/generic/emailIssueToc/objects/issue_footer.tpl');
 
 					$request->setRouter($originalRouter);
 					$request->setDispatcher($originalDispatcher);

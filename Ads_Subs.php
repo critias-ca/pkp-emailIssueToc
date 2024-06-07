@@ -52,7 +52,6 @@ function print_ads($sql, $dbhost, $dbuser, $dbpass, $dbname)
 				foreach ($row as $idx => $val) {
 					switch ($idx) {
 						case "Filename":
-							$val = str_replace(" ", '%20', $val);
 							$msg .= "\t\t<div>" . $val . "</div>\n";
 							break;
 						case "InstitutionName":
@@ -89,8 +88,6 @@ function print_subs($sql, $dbhost, $dbuser, $dbpass, $dbname)
 		die("Failed to connect to MySQL: " . $dbconnect->connect_error);
 	}
 	$msg = "";
-	load_file_content($TUS, __DIR__ . "/sql/tmp_user_settings.sql");
-	$res_TUS = $dbconnect->query($TUS);
 
 	load_file_content($TAS, __DIR__ . "/sql/Tmp_Act_Subsc_Sustain.sql");
 	$res_TAS = $dbconnect->query($TAS);
