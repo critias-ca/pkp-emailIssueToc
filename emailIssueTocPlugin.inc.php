@@ -110,11 +110,13 @@ class emailIssueTocPlugin extends GenericPlugin
 					$message .= $templateMgr->fetch('/../plugins/generic/emailIssueToc/objects/issue_toc_ads.tpl');
 
 					//variables for Database connection
-					require(__DIR__ . '/dbconnect.php');
+					$dbhost = Config::getVar('database', 'host');
+					$dbuser = Config::getVar('database', 'username');
+					$dbpass = Config::getVar('database', 'password');
+					$dbname = Config::getVar('database', 'name');
 					if (!isset($dbhost, $dbuser, $dbpass, $dbname)) {
 						error_log("Error: Database connection variables are not set.");
 					}
-
 					//set Advertisers sql and add to message
 					$ADV = "";
 					load_file_content($ADV, __DIR__ . "/sql/ads.sql");

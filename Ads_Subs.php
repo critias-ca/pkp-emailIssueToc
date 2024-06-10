@@ -34,27 +34,33 @@ function print_ads($sql, $dbhost, $dbuser, $dbpass, $dbname)
 	$res = $dbconnect->query($sql);
 
 	//print table content
-	$ridx = 0;
 
 	if ($res->num_rows > 0) {
 		while ($row = $res->fetch_assoc()) {
-			$ridx += 1;
 
 			if (!empty($row)) {
 
-
-				if ($ridx % 2 == 1)
-					$odd_cls = " class=\"odd\"";
-				else
-					$odd_cls = "";
-				$msg .= "\t<div style=\"display: inline-block; margin: 0.5rem;\"" . $odd_cls . ">\n";
+				$msg .= "\t<div style=\"display: inline-block; margin: 0.5rem;\">\n";
 
 				foreach ($row as $idx => $val) {
 					switch ($idx) {
+						case "Type":
+							$msg .= '<img src="https://caa-aca.ca/advertisements/' . $val;
+							break;
 						case "Filename":
-							$msg .= "\t\t<div>" . $val . "</div>\n";
+							$val = htmlspecialchars($val);
+							$msg .= $val . "\"";
+							break;
+						case "Width":
+							if ($val == 14) {
+								$val = 77;
+							} else {
+								$val = 153;
+							}
+							$msg .= " width=\"" . $val . "\" >";
 							break;
 						case "InstitutionName":
+							$val = $val = htmlspecialchars($val);
 							$msg .= "\t\t<div style=\"margin-top: 1rem\">\n";
 							$msg .= "\t\t\t<strong>" . $val . "</strong>\n";
 							break;
@@ -89,25 +95,15 @@ function print_subs($sql, $dbhost, $dbuser, $dbpass, $dbname)
 	}
 	$msg = "";
 
-	load_file_content($TAS, __DIR__ . "/sql/Tmp_Act_Subsc_Sustain.sql");
-	$res_TAS = $dbconnect->query($TAS);
-
 	$res = $dbconnect->query($sql);
 
 	//print table content
-	$ridx = 0;
 
 	while ($row = $res->fetch_assoc()) {
-		$ridx += 1;
 
 		if (!empty($row)) {
 
-
-			if ($ridx % 2 == 1)
-				$odd_cls = " class=\"odd\"";
-			else
-				$odd_cls = "";
-			$msg .= "\t<div style=\"display: inline-block; margin: 0.5rem;\"" . $odd_cls . ">\n";
+			$msg .= "\t<div style=\"display: inline-block; margin: 0.5rem;\">\n";
 
 			$domain = false;
 
@@ -116,14 +112,16 @@ function print_subs($sql, $dbhost, $dbuser, $dbpass, $dbname)
 					case "Domain":
 						if (!is_null($val) and !empty($val)) {
 							$domain = true;
-							$val = str_replace(" ", '%20', $val);
+							$val = htmlspecialchars($val);
 							$msg .= "\t\t\t<a href=\"http://" . $val . "\" target=\"_blank\">";
 						}
 						break;
 					case "Logo":
-						$msg .= $val;
+						$val = htmlspecialchars($val);
+						$msg .= '<img src="https://caa-aca.ca/sustaining_subscribers/' . $val . "\"";
 						break;
 					case "Company":
+						$val = htmlspecialchars($val);
 						$msg .= " alt=\"" . $val . "\" width=\"77\"/>";
 						if ($domain) {
 							$msg .= "</a>";
