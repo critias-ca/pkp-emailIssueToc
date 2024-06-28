@@ -110,18 +110,10 @@ class emailIssueTocPlugin extends GenericPlugin
 					//add Table of Contents
 					$message .= $templateMgr->fetch($this->getTemplateResource('frontend/objects/issue_toc.tpl'));
 
-					//variables for Database connection
-					$dbhost = Config::getVar('database', 'host');
-					$dbuser = Config::getVar('database', 'username');
-					$dbpass = Config::getVar('database', 'password');
-					$dbname = Config::getVar('database', 'name');
-					if (!isset($dbhost, $dbuser, $dbpass, $dbname)) {
-						error_log("Error: Database connection variables are not set.");
-					}
 					//set Advertisers sql and add to message
-					$message .= print_ads($dbhost, $dbuser, $dbpass, $dbname);
+					$message .= print_ads();
 					//set SustainingSubs SQL and add to message
-					$message .= print_subs($dbhost, $dbuser, $dbpass, $dbname);
+					$message .= print_subs();
 					//add footer
 					$message .= $templateMgr->fetch($this->getTemplateResource('issue_footer.tpl'));
 
