@@ -11,8 +11,8 @@ msgstr ""
 "PO-Revision-Date: 2022-01-04T09:50:22-05:00\n"
 "Language: \n"
 
-msgid "plugins.generic.emailIssueToc.displayName"
+msgid "plugins.generic.jcaaEmailIssueToc.displayName"
 msgstr "Email Issue TOC Plugin"
 
-msgid "plugins.generic.emailIssueToc.description"
+msgid "plugins.generic.jcaaEmailIssueToc.description"
 msgstr "Enhances the default email notification when publishing an issue to send the full table of contents in the email."

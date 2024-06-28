@@ -2,16 +2,16 @@
 <!DOCTYPE version SYSTEM "../../../lib/pkp/dtd/pluginVersion.dtd">
 
 <!--
-  * plugins/generic/emailIssueToc/version.xml
+  * plugins/generic/jcaaEmailIssueToc/version.xml
   *
   *
   * Plugin version information.
   -->
 <version>
-	<application>emailIssueToc</application>
+	<application>jcaaEmailIssueToc</application>
 	<type>plugins.generic</type>
 	<release>1.1.0.4</release>
 	<date>2024-05-29</date>
 	<lazy-load>1</lazy-load>
-	<class>emailIssueTocPlugin</class>
+	<class>jcaaEmailIssueTocPlugin</class>
 </version>
