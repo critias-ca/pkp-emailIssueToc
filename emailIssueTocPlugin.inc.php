@@ -119,13 +119,9 @@ class emailIssueTocPlugin extends GenericPlugin
 						error_log("Error: Database connection variables are not set.");
 					}
 					//set Advertisers sql and add to message
-					$ADV = "";
-					load_file_content($ADV, __DIR__ . "/sql/ads.sql");
-					$message .= print_ads($ADV, $dbhost, $dbuser, $dbpass, $dbname);
+					$message .= print_ads($dbhost, $dbuser, $dbpass, $dbname);
 					//set SustainingSubs SQL and add to message
-					$ASL = "";
-					load_file_content($ASL, __DIR__ . "/sql/subs.sql");
-					$message .= print_subs($ASL, $dbhost, $dbuser, $dbpass, $dbname);
+					$message .= print_subs($dbhost, $dbuser, $dbpass, $dbname);
 					//add footer
 					$message .= $templateMgr->fetch($this->getTemplateResource('issue_footer.tpl'));
 

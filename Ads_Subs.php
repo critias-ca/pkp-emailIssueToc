@@ -1,29 +1,28 @@
 <?php
 
-function load_file_content(&$str = "", $fn = "")
+function print_ads($dbhost, $dbuser, $dbpass, $dbname)
 {
-	if (!is_readable($fn)) {
-		error_log("error reading file: " . $fn);
-		return;
-	}
-	$fp = @fopen($fn, "r");
-	if ($fp) {
-		// For each line in the file
-		while (!feof($fp)) {
-			// Push lines into the array
-			$this_line = fgets($fp);
-			if ($this_line) {
-				$str .= $this_line;
-			}
-		}
-		fclose($fp);
-	} else {
-		error_log("Failed to open file: " . $fn);
-	}
-}
+	$sql = "SELECT
+			CASE subscriptions.type_id
+				WHEN 8 THEN 'Full/'
+				WHEN 13 THEN 'Half/'
+				WHEN 14 THEN 'Quarter/'
+			END AS 'Type',
+			subscriptions.reference_number AS 'Filename',
+			subscriptions.type_id  AS 'Width',
+			institutional_subscriptions.institution_name AS 'InstitutionName'
+		FROM subscriptions
+			JOIN subscription_type_settings ON subscription_type_settings.type_id = subscriptions.type_id
+			JOIN institutional_subscriptions ON subscriptions.subscription_id = institutional_subscriptions.subscription_id
+			JOIN users ON subscriptions.user_id = users.user_id
+		WHERE subscription_type_settings.setting_name = 'name'
+			AND users.disabled = 0
+			AND subscriptions.status = 1
+			AND subscriptions.type_id IN (8, 13, 14)
+			AND subscriptions.date_end > NOW()
+		GROUP BY subscriptions.subscription_id, institutional_subscriptions.subscription_id
+		ORDER BY institutional_subscriptions.institution_name";
 
-function print_ads($sql, $dbhost, $dbuser, $dbpass, $dbname)
-{
 	$dbconnect = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 	if ($dbconnect->connect_errno) {
 		error_log("" . $dbconnect->connect_error);
@@ -86,8 +85,32 @@ function print_ads($sql, $dbhost, $dbuser, $dbpass, $dbname)
 	return $msg;
 }
 
-function print_subs($sql, $dbhost, $dbuser, $dbpass, $dbname)
+function print_subs($dbhost, $dbuser, $dbpass, $dbname)
 {
+	$sql = "SELECT
+			inner_query.Domain,
+			inner_query.Logo_File AS Logo,
+			inner_query.Company
+		FROM (
+			SELECT
+				REPLACE(institutional_subscriptions.domain, 'http://', '') AS 'Domain',
+				subscriptions.reference_number AS 'Logo_File',
+				institutional_subscriptions.institution_name AS 'Company',
+				DATE_FORMAT(subscriptions.date_end, '%Y-%m-%d') AS 'Completion date'
+			FROM users
+			JOIN subscriptions ON subscriptions.user_id = users.user_id
+			JOIN subscription_type_settings ON subscriptions.type_id = subscription_type_settings.type_id
+			JOIN institutional_subscriptions ON subscriptions.subscription_id = institutional_subscriptions.subscription_id
+			WHERE users.disabled = 0
+				AND subscriptions.status = 1
+				AND subscription_type_settings.locale = 'en_US'
+				AND subscription_type_settings.setting_name = 'name'
+				AND subscriptions.type_id = '4'
+			ORDER BY subscriptions.type_id, users.user_id ASC
+		) AS inner_query
+		WHERE inner_query.`Completion date` > NOW()
+		ORDER BY inner_query.Company";
+
 	$dbconnect = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 	if ($dbconnect->connect_errno) {
 		error_log("" . $dbconnect->connect_error);
