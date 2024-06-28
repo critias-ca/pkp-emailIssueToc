@@ -55,13 +55,21 @@ class jcaaEmailIssueTocPlugin extends GenericPlugin
 	 */
 	function sendToc($hookname, $args)
 	{
+		static $cachedMessage = null;
 		$application = Application::get();
 		$request = $application->getRequest();
 		$notification = $args[0];
 		$message =& $args[1];
+
 		$journal = $request->getJournal();
 		if ($notification->getType() == NOTIFICATION_TYPE_PUBLISHED_ISSUE) {
 			if ($notification->getAssocType() == ASSOC_TYPE_ISSUE) {
+
+				if ($cachedMessage) {
+					$message = $cachedMessage;
+					return false;
+				}
+
 				$issueId = $notification->getAssocId();
 				$issueDao = DAORegistry::getDAO('IssueDAO');
 				$issue = $issueDao->getById($issueId);
@@ -119,6 +127,7 @@ class jcaaEmailIssueTocPlugin extends GenericPlugin
 
 					$request->setRouter($originalRouter);
 					$request->setDispatcher($originalDispatcher);
+					$cachedMessage = $message;
 				}
 			}
 		}
