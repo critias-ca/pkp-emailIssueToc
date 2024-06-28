@@ -11,8 +11,8 @@ msgstr ""
 "PO-Revision-Date: 2022-01-04T09:50:22-05:00\n"
 "Language: \n"
 
-msgid "plugins.generic.emailIssueToc.displayName"
+msgid "plugins.generic.jcaaEmailIssueToc.displayName"
 msgstr "Módulo para enviar la tabla de contenidos de la publicación"
 
-msgid "plugins.generic.emailIssueToc.description"
+msgid "plugins.generic.jcaaEmailIssueToc.description"
 msgstr "Mejora a la notificación predeterminado de correo electrónico cuando publicando una publicación así que la notificación envia la tabla completa de contenidos en el correo."

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @filesource plugins/generic/emailIssueToc/emailIssueToc.inc.php
- * 
- * @class emailIssueTocPlugin
+ * @filesource plugins/generic/jcaaEmailIssueToc/jcaaEmailIssueToc.inc.php
+ *
+ * @class jcaaEmailIssueTocPlugin
  * @ingroup plugins_generic_emailIssueToc
- * 
+ *
  * @brief EmailIssueToc plugin class
  * @author suk117
  */
@@ -14,7 +14,7 @@ import('lib.pkp.classes.plugins.GenericPlugin');
 
 require_once('Ads_Subs.php');
 
-class emailIssueTocPlugin extends GenericPlugin
+class jcaaEmailIssueTocPlugin extends GenericPlugin
 {
 	/**
 	 * @copydoc LazyLoadPlugin::register()
@@ -36,7 +36,7 @@ class emailIssueTocPlugin extends GenericPlugin
 	 */
 	function getDisplayName()
 	{
-		return __('plugins.generic.emailIssueToc.displayName');
+		return __('plugins.generic.jcaaEmailIssueToc.displayName');
 	}
 
 	/**
@@ -44,7 +44,7 @@ class emailIssueTocPlugin extends GenericPlugin
 	 */
 	function getDescription()
 	{
-		return __('plugins.generic.emailIssueToc.description');
+		return __('plugins.generic.jcaaEmailIssueToc.description');
 	}
 
 	/**
