@@ -25,6 +25,7 @@ class emailIssueTocPlugin extends GenericPlugin
 		if (!Config::getVar('general', 'installed') || defined('RUNNING_UPGRADE'))
 			return true;
 		if ($success && $this->getEnabled()) {
+			HookRegistry::register('TemplateResource::getFilename', [$this, '_overridePluginTemplates']);
 			HookRegistry::register('NotificationManager::getNotificationMessage', array(&$this, 'sendToc'));
 		}
 		return $success;
@@ -105,9 +106,9 @@ class emailIssueTocPlugin extends GenericPlugin
 					$templateMgr->assign('issue', $issue);
 					$templateMgr->assign('publishedSubmissions', $issueSubmissionsInSection);
 					//add logo
-					$message = $templateMgr->fetch('/../plugins/generic/emailIssueToc/objects/issue_logo.tpl');
+					$message = $templateMgr->fetch($this->getTemplateResource( 'issue_logo.tpl'));
 					//add Table of Contents
-					$message .= $templateMgr->fetch('/../plugins/generic/emailIssueToc/objects/issue_toc_ads.tpl');
+					$message .= $templateMgr->fetch($this->getTemplateResource('frontend/objects/issue_toc.tpl'));
 
 					//variables for Database connection
 					$dbhost = Config::getVar('database', 'host');
@@ -126,7 +127,7 @@ class emailIssueTocPlugin extends GenericPlugin
 					load_file_content($ASL, __DIR__ . "/sql/subs.sql");
 					$message .= print_subs($ASL, $dbhost, $dbuser, $dbpass, $dbname);
 					//add footer
-					$message .= $templateMgr->fetch('/../plugins/generic/emailIssueToc/objects/issue_footer.tpl');
+					$message .= $templateMgr->fetch($this->getTemplateResource('issue_footer.tpl'));
 
 					$request->setRouter($originalRouter);
 					$request->setDispatcher($originalDispatcher);

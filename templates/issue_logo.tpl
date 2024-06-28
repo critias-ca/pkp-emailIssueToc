@@ -4,7 +4,7 @@
   * Default (black and white logo) - "https://jcaa.caa-aca.ca/public/journals/1/homepageImage_en_US.png"
   *
   * For colored logo use LogoColorer.php pathway.
-  * "https://jcaa.caa-aca.ca/plugins/generic/emailIssueToc/logoColorer/logoColorer.php"
+  * "https://jcaa.caa-aca.ca/plugins/generic/jcaaEmailIssueToc/logoColorer/logoColorer.php"
   *}
 
 {assign var="link" value="https://jcaa.caa-aca.ca/"}
