@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @filesource plugins/generic/emailIssueToc/emailIssueToc.inc.php
- * 
- * @class emailIssueTocPlugin
+ * @filesource plugins/generic/jcaaEmailIssueToc/jcaaEmailIssueToc.inc.php
+ *
+ * @class jcaaEmailIssueTocPlugin
  * @ingroup plugins_generic_emailIssueToc
- * 
+ *
  * @brief EmailIssueToc plugin class
  * @author suk117
  */
@@ -14,7 +14,7 @@ import('lib.pkp.classes.plugins.GenericPlugin');
 
 require_once('Ads_Subs.php');
 
-class emailIssueTocPlugin extends GenericPlugin
+class jcaaEmailIssueTocPlugin extends GenericPlugin
 {
 	/**
 	 * @copydoc LazyLoadPlugin::register()
@@ -25,6 +25,7 @@ class emailIssueTocPlugin extends GenericPlugin
 		if (!Config::getVar('general', 'installed') || defined('RUNNING_UPGRADE'))
 			return true;
 		if ($success && $this->getEnabled()) {
+			HookRegistry::register('TemplateResource::getFilename', [$this, '_overridePluginTemplates']);
 			HookRegistry::register('NotificationManager::getNotificationMessage', array(&$this, 'sendToc'));
 		}
 		return $success;
@@ -35,7 +36,7 @@ class emailIssueTocPlugin extends GenericPlugin
 	 */
 	function getDisplayName()
 	{
-		return __('plugins.generic.emailIssueToc.displayName');
+		return __('plugins.generic.jcaaEmailIssueToc.displayName');
 	}
 
 	/**
@@ -43,7 +44,7 @@ class emailIssueTocPlugin extends GenericPlugin
 	 */
 	function getDescription()
 	{
-		return __('plugins.generic.emailIssueToc.description');
+		return __('plugins.generic.jcaaEmailIssueToc.description');
 	}
 
 	/**
@@ -54,13 +55,21 @@ class emailIssueTocPlugin extends GenericPlugin
 	 */
 	function sendToc($hookname, $args)
 	{
+		static $cachedMessage = null;
 		$application = Application::get();
 		$request = $application->getRequest();
 		$notification = $args[0];
 		$message =& $args[1];
+
 		$journal = $request->getJournal();
 		if ($notification->getType() == NOTIFICATION_TYPE_PUBLISHED_ISSUE) {
 			if ($notification->getAssocType() == ASSOC_TYPE_ISSUE) {
+
+				if ($cachedMessage) {
+					$message = $cachedMessage;
+					return false;
+				}
+
 				$issueId = $notification->getAssocId();
 				$issueDao = DAORegistry::getDAO('IssueDAO');
 				$issue = $issueDao->getById($issueId);
@@ -105,31 +114,20 @@ class emailIssueTocPlugin extends GenericPlugin
 					$templateMgr->assign('issue', $issue);
 					$templateMgr->assign('publishedSubmissions', $issueSubmissionsInSection);
 					//add logo
-					$message = $templateMgr->fetch('/../plugins/generic/emailIssueToc/objects/issue_logo.tpl');
+					$message = $templateMgr->fetch($this->getTemplateResource( 'issue_logo.tpl'));
 					//add Table of Contents
-					$message .= $templateMgr->fetch('/../plugins/generic/emailIssueToc/objects/issue_toc_ads.tpl');
+					$message .= $templateMgr->fetch($this->getTemplateResource('frontend/objects/issue_toc.tpl'));
 
-					//variables for Database connection
-					$dbhost = Config::getVar('database', 'host');
-					$dbuser = Config::getVar('database', 'username');
-					$dbpass = Config::getVar('database', 'password');
-					$dbname = Config::getVar('database', 'name');
-					if (!isset($dbhost, $dbuser, $dbpass, $dbname)) {
-						error_log("Error: Database connection variables are not set.");
-					}
 					//set Advertisers sql and add to message
-					$ADV = "";
-					load_file_content($ADV, __DIR__ . "/sql/ads.sql");
-					$message .= print_ads($ADV, $dbhost, $dbuser, $dbpass, $dbname);
+					$message .= print_ads();
 					//set SustainingSubs SQL and add to message
-					$ASL = "";
-					load_file_content($ASL, __DIR__ . "/sql/subs.sql");
-					$message .= print_subs($ASL, $dbhost, $dbuser, $dbpass, $dbname);
+					$message .= print_subs();
 					//add footer
-					$message .= $templateMgr->fetch('/../plugins/generic/emailIssueToc/objects/issue_footer.tpl');
+					$message .= $templateMgr->fetch($this->getTemplateResource('issue_footer.tpl'));
 
 					$request->setRouter($originalRouter);
 					$request->setDispatcher($originalDispatcher);
+					$cachedMessage = $message;
 				}
 			}
 		}

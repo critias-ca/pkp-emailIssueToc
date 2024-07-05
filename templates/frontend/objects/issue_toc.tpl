@@ -108,7 +108,7 @@
 			<ul class="cmp_article_list articles">
 				{foreach from=$section.articles item=article}
 					<li>
-						{include file="frontend/objects/article_summary_ads.tpl" heading=$articleHeading}
+						{include file="frontend/objects/article_summary.tpl" heading=$articleHeading}
 					</li>
 				{/foreach}
 			</ul>

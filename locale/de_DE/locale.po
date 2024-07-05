@@ -11,8 +11,8 @@ msgstr ""
 "PO-Revision-Date: 2022-01-04T09:50:22-05:00\n"
 "Language: \n"
 
-msgid "plugins.generic.emailIssueToc.displayName"
+msgid "plugins.generic.jcaaEmailIssueToc.displayName"
 msgstr "E-Mail Ausgabe Inhaltsverzeichnis Plugin"
 
-msgid "plugins.generic.emailIssueToc.description"
+msgid "plugins.generic.jcaaEmailIssueToc.description"
 msgstr "Das Plugin erweitert die Standard-E-Mail-Benachrichtigung um das Inhaltsverzeichnis, wenn eine neue Ausgabe veröffentlicht wird."
